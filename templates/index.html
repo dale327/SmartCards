@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Мои колоды</h2>
+<div class="row">
+    {% for deck in decks %}
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ deck.title }}</h5>
+                <p class="card-text text-muted">{{ deck.description }}</p>
+                <a href="/deck/{{ deck.id }}/add_card" class="btn btn-primary btn-sm">+ Карточка</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
