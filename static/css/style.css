@@ -1,0 +1,6 @@
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.navbar { margin-bottom: 30px; }
+.card-flash { transition: transform 0.2s; border-radius: 15px; }
+.card-flash:hover { transform: scale(1.02); }
+.img-card-preview { max-height: 150px; object-fit: cover; border-radius: 10px; }
+.btn-translate { margin-top: 5px; font-size: 0.8rem; }

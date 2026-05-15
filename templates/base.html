@@ -4,19 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>SmartCards</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>SmartCards — Учись эффективно</title>
+    <style>
+        .navbar-brand { font-weight: 700; letter-spacing: -0.5px; }
+        .main-container { min-height: 80vh; padding-top: 2rem; padding-bottom: 4rem; }
+        .footer { padding: 2rem 0; color: #6c757d; font-size: 0.9rem; }
+    </style>
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">SmartCards</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="/deck/new">Создать колоду</a>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">SmartCards</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Мои колоды</a></li>
+                <li class="nav-item"><a class="btn btn-primary btn-sm ms-lg-3" href="{{ url_for('new_deck') }}">Создать
+                    колоду</a></li>
+                <li class="nav-item ms-lg-4">
+                    <span class="text-secondary small d-block">Пользователь:</span>
+                    <span class="text-white fw-bold">{{ current_user.username }}</span>
+                </li>
+                <li class="nav-item ms-lg-3"><a class="nav-link text-warning" href="{{ url_for('logout') }}">Выход</a>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Вход</a></li>
+                <li class="nav-item"><a class="btn btn-outline-light btn-sm ms-lg-2" href="{{ url_for('register') }}">Регистрация</a>
+                </li>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
-    <div class="container mt-4">
-        {% block content %}{% endblock %}
     </div>
+</nav>
+
+<div class="container main-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

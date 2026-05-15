@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow border-0 p-4">
+            <h3 class="fw-bold mb-4 text-center">Новая карточка</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.question.label(class="form-label fw-bold") }}
+                    <div class="input-group">
+                        {{ form.question(class="form-control", id="q_input", placeholder="Например: Apple") }}
+                        <button type="button" class="btn btn-outline-primary" onclick="autoTranslate()">✨ Перевести
+                        </button>
+                    </div>
+                    <div id="loader" class="spinner-border spinner-border-sm text-primary d-none mt-2"
+                         role="status"></div>
+                </div>
+                <div class="mb-3">
+                    {{ form.answer.label(class="form-label fw-bold") }}
+                    {{ form.answer(class="form-control", id="a_input", placeholder="Яблоко") }}
+                </div>
+                <div class="mb-4">
+                    {{ form.image.label(class="form-label fw-bold") }}
+                    {{ form.image(class="form-control") }}
+                    <div class="form-text">Картинка поможет лучше запомнить слово.</div>
+                </div>
+                <div class="d-grid gap-2">
+                    {{ form.submit(class="btn btn-success btn-lg") }}
+                    <a href="{{ url_for('view_deck', deck_id=deck.id) }}" class="btn btn-link text-muted">Вернуться
+                        назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function autoTranslate() {
+        const word = document.getElementById('q_input').value;
+        if (!word) {
+            alert("Сначала введите слово");
+            return;
+        }
+
+        const btn = event.target;
+        btn.innerText = "Перевод...";
+        btn.disabled = true;
+
+        window.location.href = window.location.pathname + "?auto_translate=1&question=" + encodeURIComponent(word);
+    }
+</script>
+{% endblock %}

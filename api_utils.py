@@ -1,11 +1,31 @@
-import requests
+import re
 
-def translate_text(text, pair="ru|en"):
-    try:
-        url = f"https://api.mymemory.translated.net/get?q={text}&langpair={pair}"
-        response = requests.get(url, timeout=5)
-        if response.ok:
-            return response.json().get('responseData', {}).get('translatedText', "")
-    except Exception:
+import translators as ts
+
+
+def translate_text(text):
+    if not text or len(text.strip()) == 0:
         return ""
-    return ""
+
+    is_russian = bool(re.search('[а-яА-Я]', text))
+    from_lang = 'ru' if is_russian else 'en'
+    to_lang = 'en' if is_russian else 'ru'
+
+    engines = ['yandex', 'bing', 'google']
+
+    for engine in engines:
+        try:
+            result = ts.translate_text(
+                query_text=text,
+                translator=engine,
+                from_language=from_lang,
+                to_language=to_lang,
+                timeout=5
+            )
+            if result:
+                return result
+        except Exception as e:
+            print(f"Сервис {engine} временно недоступен: {e}")
+            continue
+
+    return "Ошибка перевода"
